@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Western States Lottery Futility</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .chart-container {
+            background: #162447;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid #2a4073;
+        }
+        .title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #e43f5a;
+            text-align: center;
+        }
+        .subtitle {
+            color: #8d99ae;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            font-style: italic;
+            color: #8d99ae;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            border-top: 1px solid #2a4073;
+            padding-top: 1rem;
+        }
+        #chart-wrapper {
+            position: relative;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <div class="title">The Western States Lottery: A Decade of Despair</div>
+        <div class="subtitle">Total Tickets: 66,694 | Total Shattered Dreams: 9,607</div>
+        <div id="chart-wrapper">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="footer">
+            "Time is a flat circle, just like the Western States course... except you'll never get to run it."
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10'],
+            datasets: [
+                {
+                    label: 'Tickets (False Hope)',
+                    data: [1, 2, 4, 8, 16, 32, 64, 128, 256, 512],
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                    order: 2,
+                    yAxisID: 'y',
+                    type: 'bar'
+                },
+                {
+                    label: 'Odds of Selection (%)',
+                    data: [0.45, 0.91, 1.81, 3.59, 7.05, 13.58, 25.34, 44.25, 68.86, 90.15],
+                    borderColor: '#e43f5a',
+                    backgroundColor: '#e43f5a',
+                    type: 'line',
+                    order: 1,
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }
+            ]
+        };
+
+        const tooltipLabels = [
+            "Hope Springs Eternal",
+            "Still Optimistic",
+            "Getting Worried",
+            "Maybe Next Year?",
+            "Starting to Age",
+            "Kids Growing Up",
+            "Midlife Crisis",
+            "Retirement Plans",
+            "Grandkids Now",
+            "Finally!"
+        ];
+
+        const tooltipMessages = (odds) => {
+            if (odds < 10) return "Maybe take up knitting instead?";
+            if (odds < 50) return "Still better odds than the lottery!";
+            return "You might actually make it!";
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Number of Tickets (aka False Hope)',
+                            color: '#8d99ae',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(42, 64, 115, 0.3)'
+                        },
+                        ticks: {
+                            color: '#8d99ae'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Odds of Selection (%)',
+                            color: '#8d99ae',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            color: '#8d99ae'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Years of Failed Attempts',
+                            color: '#8d99ae',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        ticks: {
+                            color: '#8d99ae'
+                        },
+                        grid: {
+                            color: 'rgba(42, 64, 115, 0.3)'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                return tooltipLabels[context[0].dataIndex];
+                            },
+                            afterBody: function(context) {
+                                const odds = data.datasets[1].data[context[0].dataIndex];
+                                return tooltipMessages(odds);
+                            }
+                        },
+                        backgroundColor: '#1a1a2e',
+                        titleColor: '#e43f5a',
+                        bodyColor: '#fff',
+                        borderColor: '#2a4073',
+                        borderWidth: 1,
+                        padding: 12,
+                        bodyFont: {
+                            size: 14
+                        },
+                        titleFont: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            color: '#8d99ae',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Wait for the DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>
